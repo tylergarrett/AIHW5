@@ -62,7 +62,7 @@ def play_test_slots(state):
 	info['costs'][info['current_slot']] = state['last-cost']
 	info['money'] = info['money'] - state['last-cost'] + state['last-payoff']
 	
-	if(info['trials'] == 49 or info['costs'][info['current_slot']] * info['trials'] > 5,000):
+	if(info['trials'] == 49 or (info['costs'][info['current_slot']] * info['trials'] - info['payoffs'][info['current_slot']]) > 5,000):
 		info['trials'] =0
 		info['current_slot'] = str(int(info['current_slot']) + 1)
 	save_data(info)
