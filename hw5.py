@@ -82,13 +82,13 @@ def choose_slots():
 
 	# Get average payoff ratio for each slot
 	for i in range(0,100):
-		ratio.append(info['payoff'][str(i)] / info["costs"][str(i)])
+		ratio.append(info['payoffs'][str(i)] / info["costs"][str(i)])
 		
 	
 	# Need to get top 10 ratios
 	slot_list= sorted(range(len(ratio)), key=lambda i: ratio[i])[-15:]
 	slot_list.reverse()
-	slot_list[5:]
+	slot_list = slot_list[5:]
 	info['slot_list'] = slot_list
 	save_data(info)	
 	return slot_list

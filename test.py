@@ -15,3 +15,10 @@ for i in range(0,1000):
 		"last-metadata":0,
 		}
 		print(hw5.get_move(state))
+
+
+state = {
+"team-code": "eef8976e",
+"game": "phase_2_a",
+}
+print(hw5.get_move(state))
