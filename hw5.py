@@ -43,7 +43,7 @@ def play_test_slots(state):
 	if len(info) == 0:
 		info['current_slot'] = '0'
 		info['trials'] = 0
-		info['money'] = 1,000,000
+		info['money'] = 1000000
 		# Dictionary of slots with list of payoffs
 		info["payoffs"] = {}
 		# Dict of slots with costs
@@ -59,10 +59,10 @@ def play_test_slots(state):
 		info["payoffs"][info['current_slot']] += state["last-payoff"]
 	else:
 		info["payoffs"][info['current_slot']] = state["last-payoff"]
-	info['costs'][info['current_slot']] = [state['last-cost']]
+	info['costs'][info['current_slot']] = state['last-cost']
 	info['money'] = info['money'] - state['last-cost'] + state['last-payoff']
 	
-	if(info['trials'] == 49 or info['costs']info['current_slot'] * info['trials'] > 5,000):
+	if(info['trials'] == 49 or info['costs'][info['current_slot']] * info['trials'] > 5,000):
 		info['trials'] =0
 		info['current_slot'] = str(int(info['current_slot']) + 1)
 	save_data(info)
@@ -111,7 +111,7 @@ def play_auction(state):
 	}
 
 
-def bid(state,info);
+def bid(state,info):
 	#TODO:currently only the simple solution
 	return {"team-code":state["team-code"],
 				"game":state["game"],
