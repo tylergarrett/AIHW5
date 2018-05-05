@@ -43,6 +43,7 @@ def play_test_slots(state):
 	if len(info) == 0:
 		info['current_slot'] = '0'
 		info['trials'] = 0
+		info['money'] = 1,000,000
 		# Dictionary of slots with list of payoffs
 		info["payoffs"] = {}
 		# Dict of slots with costs
@@ -59,6 +60,7 @@ def play_test_slots(state):
 	else:
 		info["payoffs"][info['current_slot']] = state["last-payoff"]
 	info['costs'][info['current_slot']] = [state['last-cost']]
+	info['money'] = info['money'] - state['last-cost'] + state['last-payoff']
 	
 	if(info['trials'] == 49 or info['costs']info['current_slot'] * info['trials'] > 5,000):
 		info['trials'] =0
@@ -77,36 +79,27 @@ def choose_slots():
 	slot_list = []
 	# Load data
 	info = load_data()
-	info["slot-ratios"] = {}
+	ratio = []
 
 	# Get average payoff ratio for each slot
 	for i in range(0,100):
-		average_payoff = info["payoffs"][i] / 10
-		ratio = average_payoff / info["costs"][i]
-		info["slot-ratios"][i] = ratio 
-	
-	# save
-	save_data(info)
+		ratio.append(info['payoff'][str(i)] / info["costs"][str(i)])
+		
 	
 	# Need to get top 10 ratios
-	for i in range(0,10):
-		key_to_choose = get_max_in_dict(info["slot-ratios"])
-		slot_list.append(key_to_choose)
-		info["slot-ratios"][key_to_choose] = 0
-		save_data(info)
+	slot_list= sorted(range(len(ratio)), key=lambda i: ratio[i])[-15:]
+	slot_list.reverse()
+	slot_list[5:]
+	info['slot_list'] = slot_list
+	save_data(info)	
 	return slot_list
-
-def get_max_in_dict(dict):
-	# Citing source: https://stackoverflow.com/questions/268272/getting-key-with-maximum-value-in-dictionary?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
-	values = dict.values() # this gets all values
-	keys = dict.keys() # this gets all keys
-	return keys[values.index(max(values))] # this selects the key based on the max value in the list of avalues
 
 
 # Phase 2A - Choosing slots to auction
 # We get to choose 10
 def play_auction(state):
 	info = load_data()
+
 
 	# Load slots chosen prior
 	slot_list = choose_slots()
@@ -117,17 +110,29 @@ def play_auction(state):
 			"auctions":slot_list
 	}
 
+
+def bid(state,info);
+	#TODO:currently only the simple solution
+	return {"team-code":state["team-code"],
+				"game":state["game"],
+				"bid": info['money'] * .10
+		}
+
+
+
 # Phase 2B - Bidding
 # We can bid on 5 others not in slot_list
 # Bid of 0 = pass
 def play_bids(state):
-	bid = 0
-
-	# Generic return
-	return {"team-code":state["team-code"],
-			"game":state["game"],
-			"bid":bid
-	}
+	info = load_data()
+	if state['auction_number'] in info[slot_list]:
+		return bid(state,info)
+	else:
+		# Generic return
+		return {"team-code":state["team-code"],
+				"game":state["game"],
+				"bid":0
+		}
 
 
 
