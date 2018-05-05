@@ -30,7 +30,7 @@ def save_data(info):
 def play_test_slots(state):
 
 	# Stop pulling after 1000 tests
-	if (state["pulls-left"] < 9000):
+	if (state["pulls-left"] < 5000):
 		return {"team-code":state["team-code"], 
 			"game":state["game"],
 			"pull":None
@@ -41,8 +41,8 @@ def play_test_slots(state):
 
 	# First time
 	if len(info) == 0:
-		# List of tested slots
-		info["slots-tested"] = []
+		info['current_slot'] = '0'
+		info['trials'] = 0
 		# Dictionary of slots with list of payoffs
 		info["payoffs"] = {}
 		# Dict of slots with costs
@@ -50,23 +50,29 @@ def play_test_slots(state):
 		save_data(info)
 		return {"team-code":state["team-code"], 
 				"game":state["game"],
-				"pull":slot
+				"pull":0
 		}
 
-	# Log data from returned state after first pull
-	info["slots-tested"] += slot
-	info["payoffs"][slot] += state["last-payoff"]
-	info["costs"][slot] = state["last-cost"]
+	info['trials'] +=1
+	if info['current_slot'] in info['payoffs']:
+		info["payoffs"][info['current_slot']] += state["last-payoff"]
+	else:
+		info["payoffs"][info['current_slot']] = state["last-payoff"]
+	if info['current_slot'] in info['costs']:
+		info["costs"][info['current_slot']].append(state["last-cost"])
+	else:
+		info['costs'][info['current_slot']] = [state['last-cost']]
+	
+	if(info['trials'] == 49):
+		info['trials'] =0
+		info['current_slot'] = str(int(info['current_slot']) + 1)
 	save_data(info)
 
-	# Test each slot 10 times - increment when reached
-	if (info["slots-tested"].count(slot) = 10) and (slot < 100):
-		slot++
 
 	# Return statement
 	return {"team-code":state["team-code"], 
 			"game":state["game"],
-			"pull":slot
+			"pull":info['current_slot']
 	}
 
 # Pick best slots from testing phase
