@@ -28,13 +28,7 @@ def save_data(info):
 # Phase One - Testing the slot machines
 # Strategy: Test each slot 10 times since we have 1,000,000 credits
 def play_test_slots(state):
-
-	# Stop pulling after 1000 tests
-	if (state["pulls-left"] < 5000):
-		return {"team-code":state["team-code"], 
-			"game":state["game"],
-			"pull":None
-	}	
+		
 
 	# Load in data
 	info = load_data()
@@ -53,6 +47,12 @@ def play_test_slots(state):
 				"game":state["game"],
 				"pull":0
 		}
+	# Stop pulling after 1000 tests
+	if (state["pulls-left"] < 5000 or int(info['current_slot']) > 99):
+		return {"team-code":state["team-code"], 
+			"game":state["game"],
+			"pull":None
+	}
 
 	info['trials'] +=1
 	if info['current_slot'] in info['payoffs']:
@@ -61,8 +61,7 @@ def play_test_slots(state):
 		info["payoffs"][info['current_slot']] = state["last-payoff"]
 	info['costs'][info['current_slot']] = state['last-cost']
 	info['money'] = info['money'] - state['last-cost'] + state['last-payoff']
-	
-	if(info['trials'] == 49 or (info['costs'][info['current_slot']] * info['trials'] - info['payoffs'][info['current_slot']]) > 5,000):
+	if(info['trials'] == 49 or (info['costs'][info['current_slot']] * info['trials'] - info['payoffs'][info['current_slot']]) > 5000):
 		info['trials'] =0
 		info['current_slot'] = str(int(info['current_slot']) + 1)
 	save_data(info)

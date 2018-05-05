@@ -1,11 +1,17 @@
-import hw5
+import hw5, random 
 
-state = {
-"team-code": "eef8976e",
-"game": "phase_1",
-"pulls-left": 99999,
-"last-cost": 0.1,
-"last-payoff": 50,
-"last-metadata":0,
-}
-print(hw5.get_move(state))
+pulls = 10001
+for i in range(0,1000):
+	cost = random.randrange(-100,100,1)
+	for j in range(0,10):
+		print(pulls)
+		pulls -= 1
+		state = {
+		"team-code": "eef8976e",
+		"game": "phase_1",
+		"pulls-left": pulls,
+		"last-cost": cost,
+		"last-payoff": random.randrange(-1000,1000,1),
+		"last-metadata":0,
+		}
+		print(hw5.get_move(state))
