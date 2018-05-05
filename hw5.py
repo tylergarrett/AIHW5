@@ -124,7 +124,7 @@ def bid(state,info):
 # Bid of 0 = pass
 def play_bids(state):
 	info = load_data()
-	if state['auction_number'] in info[slot_list]:
+	if state['auction-number'] in info['slot_list']:
 		return bid(state,info)
 	else:
 		# Generic return

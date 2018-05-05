@@ -22,3 +22,15 @@ state = {
 "game": "phase_2_a",
 }
 print(hw5.get_move(state))
+
+for j in range(0,100):
+	state = {
+	"team-code": "eef8976e",
+	"game": "phase_2_b",
+	"auction-number": j,
+	"your-slots": [],
+	"auction-lists": [
+	["eef8976e"]
+	]
+	}
+	print(hw5.get_move(state))
