@@ -137,7 +137,7 @@ def bid(state,info):
 def play_bids(state):
 	info = load_data()
 
-	if(state['auction-number'] == 0):
+	if('extra_five' not in info):
 		temp = []
 		for i in info['top_30']:
 			if i not in info['slot_list']:
