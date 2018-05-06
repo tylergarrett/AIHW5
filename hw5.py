@@ -88,6 +88,7 @@ def choose_slots():
 	# Need to get top 10 ratios
 	slot_list= sorted(range(len(ratio)), key=lambda i: ratio[i])[-15:]
 	slot_list.reverse()
+	info['top_30'] = slot_list[:30]
 	slot_list = slot_list[5:]
 	info['slot_list'] = slot_list
 	save_data(info)	
@@ -112,10 +113,21 @@ def play_auction(state):
 
 def bid(state,info):
 	#TODO:currently only the simple solution
-	return {"team-code":state["team-code"],
-				"game":state["game"],
-				"bid": info['money'] * .10
-		}
+	if state['auction-number'] in info['slot_list']:
+		index = info['slot_list'].index(state['auction-number'])
+		if index < 5:
+			x = .11
+		else:
+			x = .08
+		return {"team-code":state["team-code"],
+					"game":state["game"],
+					"bid": info['money'] * x
+			}
+	else:
+		return {"team-code":state["team-code"],
+					"game":state["game"],
+					"bid": info['money'] * .01
+			}
 
 
 
@@ -124,10 +136,22 @@ def bid(state,info):
 # Bid of 0 = pass
 def play_bids(state):
 	info = load_data()
-	if state['auction-number'] in info['slot_list']:
+
+	if(state['auction-number'] == 0):
+		temp = []
+		for i in info['top_30']:
+			if i not in info['slot_list']:
+				temp.append((state['auction-lists'][i],i))
+		temp.sort(key= lambda x: len(x[0]))
+		temp[:5]
+		slots = [x[1] for x in temp]
+		info['extra_five'] = slots
+		save_data(info)
+
+
+	if state['auction-number'] in info['slot_list'] or state['auction-number'] in info['extra_five']:
 		return bid(state,info)
 	else:
-		# Generic return
 		return {"team-code":state["team-code"],
 				"game":state["game"],
 				"bid":0
