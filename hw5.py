@@ -74,7 +74,7 @@ def play_test_slots(state):
 	info['money'] = info['money'] - state['last-cost'] + state['last-payoff']
 	
 
-	if(info['trials'] == 49 or (info['costs'][info['current_slot']] * info['trials'] - sum(info['payoffs'][info['current_slot']])/len(info['payoffs'][info['current_slot']]) ) > 5000):
+	if(info['trials'] == 49 or (info['costs'][info['current_slot']] * info['trials'] - sum(info['payoffs'][info['current_slot']]) ) > 5000):
 		info['trials'] =0
 		info['current_slot'] = str(int(info['current_slot']) + 1)
 
@@ -133,8 +133,7 @@ def play_auction(state):
 
 def bid(state,info):
 	if info['money'] < 0:
-		info['money'] = 0
-	#TODO:currently only the simple solution
+		info['money'] = 1
 	if state['auction-number'] in info['slot_list']:
 		index = info['slot_list'].index(state['auction-number'])
 		if index < 5:

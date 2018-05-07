@@ -2,7 +2,7 @@ import hw5, random
 
 pulls = 10001
 for i in range(0,1000):
-	cost = random.randrange(0,100000,1)
+	cost = random.randrange(0,1000,1)
 	for j in range(0,10):
 		print(pulls)
 		pulls -= 1
