@@ -11,7 +11,7 @@ for i in range(0,1000):
 		"game": "phase_1",
 		"pulls-left": pulls,
 		"last-cost": cost,
-		"last-payoff": random.randrange(0,100,1),
+		"last-payoff": random.randrange(-100,1000,1),
 		"last-metadata":0,
 		}
 		print(hw5.get_move(state))

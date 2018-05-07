@@ -1,10 +1,8 @@
 # Tyler Garrett and Ben Kellogg
-# hw5.py
 
 # Imports
 import json
 import random,copy,math,decimal,statistics
-import scipy.stats
 
 # Team declaration
 TEAM_NAME = "Better_Than_Alexa" #Pick a team name
@@ -30,9 +28,10 @@ def get_best(info):
 
 	# Get average payoff ratio for each slot
 	for i in range(0,100):
-		ratio.append( (sum(info['payoffs'][str(i)])/len(info['payoffs'][str(i)])) / (info["costs"][str(i)] if info['costs'][str(i)] != 0 else .1))
+		ratio.append( ( (sum(info['payoffs'][str(i)])/len(info['payoffs'][str(i)]))  if (sum(info['payoffs'][str(i)])/len(info['payoffs'][str(i)])) != 0 
+							else .000000001)/ (info["costs"][str(i)] if info['costs'][str(i)] != 0 else .000000001))
 	# Need to get top 10 ratios
-	slot_list= sorted(range(len(ratio)), key=lambda i: ratio[i])[-15:]
+	slot_list= sorted(range(len(ratio)), key=lambda i: ratio[i])[-25:]
 	slot_list.reverse()
 	return slot_list
 
@@ -58,7 +57,7 @@ def play_test_slots(state):
 				"game":state["game"],
 				"pull":0
 		}
-	if(info['money'] < 700000 and len(info['payoffs']) == 100):
+	if(info['money'] < 500000 and len(info['payoffs']) == 100):
 		return {"team-code":state["team-code"], 
 			"game":state["game"],
 			"pull":None
@@ -98,7 +97,6 @@ def play_test_slots(state):
 
 
 
-
 # Pick best slots from testing phase
 def choose_slots():
 	slot_list = []
@@ -108,8 +106,8 @@ def choose_slots():
 		
 	
 	
-	info['top_30'] = slot_list[:25]
-	slot_list = slot_list[5:]
+	info['top_25'] = slot_list[:25]
+	slot_list = slot_list[:10]
 	info['slot_list'] = slot_list
 	save_data(info)	
 	return slot_list
@@ -160,11 +158,11 @@ def play_bids(state):
 
 	if('extra_five' not in info):
 		temp = []
-		for i in info['top_30']:
+		for i in info['top_25']:
 			if i not in info['slot_list']:
 				temp.append((state['auction-lists'][i],i))
 		temp.sort(key= lambda x: len(x[0]))
-		temp[:5]
+		temp = temp[:5]
 		slots = [x[1] for x in temp]
 		info['extra_five'] = slots
 		save_data(info)
@@ -177,8 +175,6 @@ def play_bids(state):
 				"game":state["game"],
 				"bid":0
 		}
-
-
 
 
 # Determine what phase we are playing, return correct result
