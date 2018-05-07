@@ -116,8 +116,6 @@ def choose_slots():
 # Phase 2A - Choosing slots to auction
 # We get to choose 10
 def play_auction(state):
-	info = load_data()
-
 
 	# Load slots chosen prior
 	slot_list = choose_slots()
